@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NGO Admin Panel</title><link rel="stylesheet" href="/admin.css"></head>
+<body>
+<div id="login" class="login"><div class="loginbox"><div class="logo">LH</div><h1>NGO Admin Panel</h1><p>Manage website content</p><form id="loginForm"><input id="username" placeholder="Username" required><input id="password" type="password" placeholder="Password" required><button>Login</button><div id="loginMsg"></div></form></div></div>
+<div id="app" class="hidden"><aside><div class="sidebrand"><div class="logo">LH</div><b>LIFELINE HUMNITY<br><small>ADMIN PANEL</small></b></div><button class="tab active" data-tab="dashboard">📊 Dashboard</button><button class="tab" data-tab="site">⚙ Site Settings</button><button class="tab" data-tab="about">ℹ About</button><button class="tab" data-tab="objectives">🎯 Objectives</button><button class="tab" data-tab="work">🌱 Our Work</button><button class="tab" data-tab="projects">📋 Projects</button><button class="tab" data-tab="gallery">📸 Gallery</button><button class="tab" data-tab="team">👥 Team</button><button class="tab" data-tab="volunteer">🙋 Volunteer</button><button class="tab" data-tab="notices">📰 Notices</button><a class="view" href="/" target="_blank">↗ View Website</a><a class="view" href="/finance.html">💰 Members & Finance</a><button id="logout" class="logout">Logout</button></aside>
+<main><div class="mobilehead"><b>NGO Admin</b><button id="saveTop">Save Changes</button></div>
+<section id="dashboard" class="panel active"><div class="head"><div><small>OVERVIEW</small><h2>Admin Dashboard</h2></div><button class="save" onclick="loadDashboard()">Refresh</button></div>
+<div class="dashgrid">
+<div class="dbox"><small>Total Members</small><strong id="db_totalMembers">0</strong></div>
+<div class="dbox"><small>Active Members</small><strong id="db_activeMembers">0</strong></div>
+<div class="dbox"><small>Pending Registrations</small><strong id="db_pendingRegistrations">0</strong></div>
+<div class="dbox"><small>Current Month Collection</small><strong id="db_currentMonthCollection">₹0</strong></div>
+<div class="dbox"><small>Current Month Expenses</small><strong id="db_currentMonthExpenses">₹0</strong></div>
+<div class="dbox"><small>Current Month Balance</small><strong id="db_currentMonthBalance">₹0</strong></div>
+<div class="dbox"><small>Total Outstanding</small><strong id="db_totalOutstanding">₹0</strong></div>
+<div class="dbox"><small>Total Late Fees Collected</small><strong id="db_totalLateFees">₹0</strong></div>
+</div>
+<div class="grid2">
+<div class="dpanel"><h3>Recent Payments</h3><div class="scroll"><table><thead><tr><th>Member</th><th>Month</th><th>Total</th><th>Date</th></tr></thead><tbody id="db_recentPayments"></tbody></table></div></div>
+<div class="dpanel"><h3>Recent Expenses</h3><div class="scroll"><table><thead><tr><th>Date</th><th>Category</th><th>Amount</th><th>Note</th></tr></thead><tbody id="db_recentExpenses"></tbody></table></div></div>
+</div>
+</section>
+<section id="site" class="panel"><div class="head"><div><small>SETTINGS</small><h2>Site Information</h2></div><button class="save" data-save>Save Changes</button></div><div class="grid2">
+<label>NGO Name<input id="site_name"></label><label>Short Name<input id="site_shortName"></label><label>Tagline<input id="site_tagline"></label><label>Registration<input id="site_registration"></label><label>Phone<input id="site_phone"></label><label>Official Email<input id="site_email"></label><label>WhatsApp Link<input id="site_whatsapp" placeholder="https://wa.me/..."></label><label>Facebook<input id="site_facebook"></label><label>Instagram<input id="site_instagram"></label><label>YouTube<input id="site_youtube"></label><label class="full">Address<textarea id="site_address"></textarea></label><label class="full">Website Description<textarea id="site_description"></textarea></label></div></section>
+<section id="about" class="panel"><div class="head"><div><small>CONTENT</small><h2>About Us</h2></div><button class="save" data-save>Save Changes</button></div><label>Title<input id="about_title"></label><label>About Text<textarea id="about_text" rows="8"></textarea></label></section>
+<section id="objectives" class="panel"><div class="head"><div><small>CONTENT</small><h2>Objectives</h2></div><button class="save" data-save>Save Changes</button></div><div id="objectiveList"></div><button class="add" onclick="addObjective()">+ Add Objective</button></section>
+<section id="work" class="panel"><div class="head"><div><small>CONTENT</small><h2>Our Work</h2></div><button class="save" data-save>Save Changes</button></div><div id="workList"></div><button class="add" onclick="addWork()">+ Add Work Area</button></section>
+<section id="projects" class="panel"><div class="head"><div><small>CONTENT</small><h2>Projects</h2></div><button class="save" data-save>Save Changes</button></div><div id="projectList"></div><button class="add" onclick="addProject()">+ Add Project</button></section>
+<section id="gallery" class="panel"><div class="head"><div><small>MEDIA</small><h2>Gallery</h2></div><button class="save" data-save>Save Changes</button></div><div class="upload"><input id="galleryFile" type="file" accept="image/*"><button onclick="uploadGallery()">Upload Photo</button></div><div id="galleryList" class="galleryadmin"></div></section>
+<section id="team" class="panel"><div class="head"><div><small>PEOPLE</small><h2>Team Members</h2></div><button class="save" data-save>Save Changes</button></div><div id="teamList"></div><button class="add" onclick="addTeam()">+ Add Team Member</button></section>
+<section id="volunteer" class="panel"><div class="head"><div><small>CONTENT</small><h2>Volunteer Section</h2></div><button class="save" data-save>Save Changes</button></div><label>Title<input id="vol_title"></label><label>Text<textarea id="vol_text" rows="6"></textarea></label></section>
+<section id="notices" class="panel"><div class="head"><div><small>ANNOUNCEMENTS</small><h2>Notices</h2></div></div>
+<div class="item"><div class="itemgrid" style="grid-template-columns:1fr 150px"><label>Title<input id="nt_title"></label><label>Date<input id="nt_date" type="date"></label><label class="wide">Description<textarea id="nt_desc" rows="3"></textarea></label></div><button class="add" onclick="addNotice()">+ Add Notice</button></div>
+<div id="noticeList"></div>
+</section>
+<div id="toast"></div></main></div>
+<script src="/admin.js"></script></body></html>

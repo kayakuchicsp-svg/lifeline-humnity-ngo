@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Certificate</title><style>
+*{box-sizing:border-box}body{font-family:Georgia,'Playfair Display',serif;background:#eef2f7;margin:0;padding:30px}
+.sheet{width:297mm;max-width:96vw;min-height:190mm;margin:auto;background:#fff;border-radius:6px;box-shadow:0 12px 35px #0001;position:relative;padding:14mm;overflow:hidden}
+.border{position:absolute;inset:8mm;border:3px solid #16244a;border-radius:4px;pointer-events:none}
+.inner{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:14mm 10mm}
+.head{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+.head img{width:64px;height:64px;object-fit:contain;background:#fff;border-radius:10px}
+.head .name{text-align:left}
+.head .name b{display:block;font-size:20px;color:#16244a;font-family:Arial,sans-serif}
+.head .name small{color:#556;font-size:11px;font-family:Arial,sans-serif}
+.tag{margin-top:18px;font-size:12px;letter-spacing:4px;color:#8a6d1e;font-weight:700;font-family:Arial,sans-serif}
+.title{font-size:40px;color:#16244a;margin:10px 0 4px}
+.certno{font-size:11px;color:#889;font-family:Arial,sans-serif;margin-bottom:22px}
+.presented{font-size:13px;color:#556;font-family:Arial,sans-serif}
+.recipient{font-size:32px;color:#0b2a20;margin:12px 0;border-bottom:2px solid #dcd2ae;display:inline-block;padding-bottom:6px}
+.for{max-width:640px;font-size:14px;color:#334;line-height:1.7;font-family:Arial,sans-serif;margin-top:10px}
+.meta{display:flex;justify-content:space-between;width:100%;max-width:640px;margin-top:auto;padding-top:40px;font-family:Arial,sans-serif;font-size:11px;color:#556}
+.meta div{text-align:center}
+.sig{border-top:1px solid #667;width:180px;margin-top:34px;padding-top:6px}
+.actions{text-align:center;margin-top:20px}
+.actions button{border:0;padding:12px 20px;border-radius:9px;background:#16244a;color:#fff;font-weight:700;font-family:Arial,sans-serif;cursor:pointer}
+.err{max-width:420px;margin:15vh auto;text-align:center;font-family:Arial,sans-serif;color:#b42318}
+@media print{body{background:#fff;padding:0}.actions{display:none}.sheet{box-shadow:none;width:100%;max-width:none;min-height:0}@page{size:A4 landscape;margin:0}}
+</style></head><body>
+<div id="app"></div>
+<script>
+const params=new URLSearchParams(location.search);
+const id=params.get('id');
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+async function load(){
+  const app=document.getElementById('app');
+  if(!id){app.innerHTML='<div class="err"><h2>Certificate not specified</h2><p>No certificate id was provided.</p></div>';return}
+  try{
+    const r=await fetch('/api/certificate/'+encodeURIComponent(id));
+    const d=await r.json();
+    if(!r.ok){app.innerHTML='<div class="err"><h2>Unable to load certificate</h2><p>'+esc(d.error||'Not found or not authorized.')+'</p></div>';return}
+    const c=d.certificate, s=d.site;
+    app.innerHTML=`<div class="sheet"><div class="border"></div><div class="inner">
+      <div class="head"><img src="/logo.jpeg"><div class="name"><b>${esc(s.name||'LIFELINE HUMNITY NGO')}</b><small>${esc(s.shortName||'')} · ${esc(s.registration||'')}</small></div></div>
+      <div class="tag">CERTIFICATE OF RECOGNITION</div>
+      <div class="title">Certificate</div>
+      <div class="certno">Certificate No: ${esc(c.certNo)}</div>
+      <div class="presented">This certificate is proudly presented to</div>
+      <div class="recipient">${esc(c.memberName)}</div>
+      <div class="for">In recognition of participation in <b>${esc(c.eventName)}</b>${c.description?(' — '+esc(c.description)):''}, held on ${esc(c.date)}.</div>
+      <div class="meta">
+        <div><div class="sig">&nbsp;</div>Authorized Signature</div>
+        <div><div class="sig">${esc(c.date)}</div>Date</div>
+      </div>
+    </div></div>
+    <div class="actions"><button onclick="print()">Print Certificate</button></div>`;
+  }catch(e){app.innerHTML='<div class="err"><h2>Unable to load certificate</h2><p>Please try again.</p></div>'}
+}
+load();
+</script>
+</body></html>

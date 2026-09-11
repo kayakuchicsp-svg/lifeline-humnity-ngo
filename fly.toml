@@ -1,0 +1,18 @@
+app = "lifeline-humnity-ngo"
+primary_region = "bom"
+
+[build]
+
+[env]
+  PORT = "3000"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+[mounts]
+  source = "ngo_data"
+  destination = "/app/data"
